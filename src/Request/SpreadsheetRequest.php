@@ -112,9 +112,9 @@ class SpreadsheetRequest extends AbstractRequest implements ValidatesWhenResolve
             }
             $attributes = array_flip($this->attributes());
             $missingHeaders = array_diff(array_keys($attributes), $this->headers);
-            /*if (!empty($missingHeaders)) {
+            if (!empty($missingHeaders)) {
                 throw new ValidationException('缺少表头 ' . implode(', ', $missingHeaders));
-            }*/
+            }
             $data = [];
             foreach ($worksheet->getRowIterator(2) as $row) {
                 $rowData = [];
@@ -129,6 +129,9 @@ class SpreadsheetRequest extends AbstractRequest implements ValidatesWhenResolve
                             throw new ValidationException('请勿包含公式 @' . $cell->getCoordinate());
                         }
                         $value = $cell->getValue();
+                        if (is_object($value)) {
+                            $value = (string) $value;
+                        }
                         if (is_string($value)) {
                             $value = trim($value);;
                         }
