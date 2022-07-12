@@ -11,7 +11,7 @@
         "ext-redis": ">=5.3",
         "hyperf/db-connection": "^2.2",
         "hyperf/model-cache": "^2.2",
-        "hyperf/snowflake": "v2.2",
+        "hyperf/snowflake": "^v2.2",
         "hyperf/redis": "^2.2",
         "hyperf/config": "^2.2",
         "hyperf/context": "^2.2",
