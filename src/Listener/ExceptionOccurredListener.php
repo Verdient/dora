@@ -120,7 +120,7 @@ class ExceptionOccurredListener extends AbstractListener
      */
     public function alertDevelopers($message)
     {
-        $alertors = AnnotationCollector::getClassesByAnnotation(Alertor::class);
+        $alertors = array_keys(AnnotationCollector::getClassesByAnnotation(Alertor::class));
         foreach ($alertors as $alertor) {
             Coroutine::create(function () use ($message, $alertor) {
                 try {
