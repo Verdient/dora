@@ -7,7 +7,6 @@ namespace Verdient\Dora\Command\Producer;
 use Hyperf\Amqp\Annotation\Producer;
 use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Di\ReflectionManager;
-use Hyperf\Utils\Str;
 use Verdient\Dora\Command\AbstractCommand;
 use Verdient\Dora\Traits\HasDocBlock;
 
@@ -32,14 +31,14 @@ abstract class AbstractProducerCommand extends AbstractCommand
     public function register()
     {
         $producers = array_keys($this->getAnnotationProducers());
-        foreach ($producers as $event) {
-            $reflectClass = ReflectionManager::reflectClass($event);
-            $name = Str::kebab(str_replace('\\', '', substr($event, strlen('App\Amqp\Producer'))));
+        foreach ($producers as $producer) {
+            $reflectClass = ReflectionManager::reflectClass($producer);
+            $name = implode('-', array_slice(explode('\\', $producer), 3));
             $docComment = $reflectClass->getDocComment();
             $this->producers[$name] = [
-                'class' => $event,
+                'class' => $producer,
                 'description' => $docComment ? $this->getDocBlockParser()->create($docComment)->getSummary() : '',
-                'annotation' => $annotationProcesses[$event] ?? null
+                'annotation' => $annotationProcesses[$producer] ?? null
             ];
             ksort($this->producers);
         }
