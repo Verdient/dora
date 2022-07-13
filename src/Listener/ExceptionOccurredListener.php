@@ -8,6 +8,7 @@ use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Event\Annotation\Listener;
 use Swoole\Coroutine;
 use Verdient\Dora\Annotation\Alertor;
+use Verdient\Dora\Event\ExceptionOccurredEvent;
 use Verdient\Dora\Traits\HasLog;
 
 /**
