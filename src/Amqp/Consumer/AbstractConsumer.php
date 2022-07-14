@@ -38,12 +38,6 @@ abstract class AbstractConsumer extends ConsumerMessage
     protected $timeout = 0;
 
     /**
-     * @var string 超时策略
-     * @author Verdient。
-     */
-    protected $timeoutPolicy = 'drop';
-
-    /**
      * @author Verdient。
      */
     public function __construct()
@@ -87,47 +81,35 @@ abstract class AbstractConsumer extends ConsumerMessage
      */
     public function consumeMessage($data, AMQPMessage $message): string
     {
-        if ($data instanceof Message) {
-            if ($this->can($data->getId())) {
-                $startAt = microtime(true);
-                $delay = $startAt - $data->getCreatedAt();
-                if ($this->isTimedOut($delay)) {
-                    $result = null;
-                    switch ($this->timeoutPolicy) {
-                        case 'drop':
-                            $result = Result::DROP;
-                            break;
-                        case 'ack':
-                            $result = Result::ACK;
-                            break;
-                        case 'nack':
-                            $result = Result::NACK;
-                            break;
-                        default:
-                            throw new Exception('Unknown timeout policy: ' . $this->timeoutPolicy);
-                            break;
-                    }
-                    return $result;
-                }
-                try {
-                    return parent::consumeMessage($data->getMessage(), $message);
-                } catch (\Throwable $e) {
-                    $this->trigger(new ExceptionOccurredEvent($e));
-                    $this->logThrowable($e);
-                    Console::error($e->__toString(), Console::FG_RED);
-                    $count = $this->markAsFailed($data->getId());
-                    if ($this->can($data->getId(), $count)) {
-                        return Result::REQUEUE;
-                    } else {
-                        $this->resetFails($data->getId());
-                        return Result::DROP;
-                    }
-                }
-            }
-            $this->resetFails($data->getId());
+        if (!$data instanceof Message) {
+            $this->log()->error('Message must instance of ' . Message::class);
             return Result::DROP;
         }
-        throw new MessageException('message must instance of ' . Message::class);
+        if (!$this->can($data->getId())) {
+            $this->resetFails($data->getId());
+            $this->log()->error('The number of retries exceeded the limit');
+            return Result::DROP;
+        }
+        $startAt = microtime(true);
+        $delay = $startAt - $data->getCreatedAt();
+        if ($this->isTimedOut($delay)) {
+            $this->log()->error('Message is timedout');
+            return Result::DROP;
+        }
+        try {
+            return parent::consumeMessage($data->getMessage(), $message);
+        } catch (\Throwable $e) {
+            $this->trigger(new ExceptionOccurredEvent($e));
+            $this->logThrowable($e);
+            Console::error($e->__toString(), Console::FG_RED);
+            $this->markAsFailed($data->getId());
+            if ($this->can($data->getId())) {
+                return Result::REQUEUE;
+            } else {
+                $this->resetFails($data->getId());
+                return Result::DROP;
+            }
+        }
     }
 
     /**
