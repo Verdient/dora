@@ -142,4 +142,28 @@ class Arr extends UtilsArr
         }
         return empty(array_diff_assoc($a, $b)) && empty(array_diff_assoc($b, $a));
     }
+
+    /**
+     * 移除数组中的值
+     * @param array $array 数组
+     * @param mixed $value 要移除的值
+     * @param boolean $strict 是否严格匹配
+     * @return array
+     * @author Verdient。
+     */
+    public static function removeValue(array &$array, $value, bool $strict = false)
+    {
+        foreach ($array as $key => $val) {
+            if ($strict) {
+                if ($val === $value) {
+                    unset($array[$key]);
+                }
+            } else {
+                if ($val == $value) {
+                    unset($array[$key]);
+                }
+            }
+        }
+        return $array;
+    }
 }
