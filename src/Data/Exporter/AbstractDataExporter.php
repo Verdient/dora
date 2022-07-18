@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Verdient\Dora\Data\Exporter;
 
-use Verdient\Dora\DataCollector\DataCollectorInterface;
+use Verdient\Dora\Data\Collector\DataCollectorInterface;
 
 /**
  * 抽象导出器
