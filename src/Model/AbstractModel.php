@@ -42,6 +42,21 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
+    public function __isset($key)
+    {
+        if (!parent::__isset($key)) {
+            if (substr($key, -6) === '_label') {
+                $getter = Str::camel($key);
+                return method_exists($this, $getter);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
     public function getTable()
     {
         if (!$this->table) {
