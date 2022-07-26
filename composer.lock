@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7365b17e97546c9f5895c74c499e931",
+    "content-hash": "c7b9833c82d85286b5ec1ecf2a83d89b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5827,16 +5827,16 @@
         },
         {
             "name": "verdient/ding-talk",
-            "version": "0.0.0",
+            "version": "0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Verdient/ding-talk.git",
-                "reference": "827b46f59ddd527290777815320057af503e6dd8"
+                "reference": "5a81a78a56b787c8ea105f18307845bce029c358"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Verdient/ding-talk/zipball/827b46f59ddd527290777815320057af503e6dd8",
-                "reference": "827b46f59ddd527290777815320057af503e6dd8",
+                "url": "https://api.github.com/repos/Verdient/ding-talk/zipball/5a81a78a56b787c8ea105f18307845bce029c358",
+                "reference": "5a81a78a56b787c8ea105f18307845bce029c358",
                 "shasum": ""
             },
             "require": {
@@ -5869,7 +5869,7 @@
                 "issues": "https://github.com/Verdient/ding-talk/issues",
                 "source": "https://github.com/Verdient/ding-talk"
             },
-            "time": "2022-07-26T06:16:18+00:00"
+            "time": "2022-07-26T06:35:22+00:00"
         },
         {
             "name": "verdient/http",

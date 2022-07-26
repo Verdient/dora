@@ -18,13 +18,16 @@ trait HasWechatWork
     /**
      * 发送企业微信消息
      * @param string $message 消息内容
-     * @param array $to 接收人
+     * @param array|string $to 接收人
      * @author Verdient。
      */
     protected function sendWechatWorkMessage($message, $to)
     {
         if (!$agentId = config('wechat_work.agentId')) {
             return false;
+        }
+        if (is_array($to)) {
+            $to = [$to];
         }
         /**
          * @var WechatWork
