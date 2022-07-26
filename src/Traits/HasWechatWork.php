@@ -26,7 +26,7 @@ trait HasWechatWork
         if (!$agentId = config('wechat_work.agentId')) {
             return false;
         }
-        if (is_array($to)) {
+        if (!is_array($to)) {
             $to = [$to];
         }
         /**
