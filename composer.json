@@ -24,16 +24,16 @@
         "hyperf/process": "^2.2",
         "hyperf/amqp": "^2.2",
         "hyperf/framework": "^2.2",
-        "verdient/cli": "^0.0.3",
-        "verdient/token": "^0.1.0",
+        "verdient/cli": "^0.0",
+        "verdient/token": "^0.1",
         "lysice/hyperf-redis-lock": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.3",
         "symfony/mime": "^5.4",
         "symfony/mailer": "^5.4",
-        "verdient/wechat-work": "^0.1.0",
+        "verdient/wechat-work": "^0.1",
         "phpoffice/phpspreadsheet": "^1.24",
-        "verdient/pipeline": "^0.0.1",
-        "verdient/ding-talk": "^0.0.1"
+        "verdient/pipeline": "^0.0",
+        "verdient/ding-talk": "^0.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.8"
