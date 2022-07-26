@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d2ed4e89003f867452234f939722df8",
+    "content-hash": "d7365b17e97546c9f5895c74c499e931",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5824,6 +5824,52 @@
                 "source": "https://github.com/Verdient/cli"
             },
             "time": "2020-04-11T09:52:04+00:00"
+        },
+        {
+            "name": "verdient/ding-talk",
+            "version": "0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Verdient/ding-talk.git",
+                "reference": "827b46f59ddd527290777815320057af503e6dd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Verdient/ding-talk/zipball/827b46f59ddd527290777815320057af503e6dd8",
+                "reference": "827b46f59ddd527290777815320057af503e6dd8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "verdient/http-api": "^0.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Verdient\\DingTalk\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Verdient.",
+                    "email": "fagui.zhu@foxmail.com",
+                    "homepage": "https://github.com/Verdient"
+                }
+            ],
+            "description": "DingTalk",
+            "homepage": "https://github.com/Verdient/ding-talk",
+            "keywords": [
+                "dingtalk"
+            ],
+            "support": {
+                "issues": "https://github.com/Verdient/ding-talk/issues",
+                "source": "https://github.com/Verdient/ding-talk"
+            },
+            "time": "2022-07-26T06:16:18+00:00"
         },
         {
             "name": "verdient/http",
