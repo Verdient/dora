@@ -28,6 +28,7 @@ use Iterator;
  * @method static orderByDesc(string $column)
  * @method static take(int $value)
  * @method static whereBetween(string $column, array $values, string $boolean = 'and', bool $not = false)
+ * @method static whereJsonContains(string $column, mixed $value, string $boolean = 'and', bool $not = false)
  * @author Verdient。
  */
 class Builder extends \Hyperf\Database\Model\Builder
