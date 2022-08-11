@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Verdient\Dora\Validation;
 
+use Hyperf\Contract\TranslatorInterface;
+use Hyperf\HttpMessage\Upload\UploadedFile;
+use Hyperf\Utils\Arr;
 use Hyperf\Utils\MessageBag;
+use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Hyperf\Validation\ValidationException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\Formatter;
+use Verdient\Dora\Utils\Container;
 
 /**
  * @inheritdoc
@@ -26,19 +33,218 @@ class SpreadsheetValidator extends Validator
     protected $currentRow = 0;
 
     /**
-     * @var array 原始的数据
+     * @var bool 文件是否已解析
      * @author Verdient。
      */
-    protected $rawData = [];
+    protected $isFileParsed = false;
+
+    /**
+     * @var string 文件名
+     * @author Verdient。
+     */
+    protected $fileName = null;
+
+    /**
+     * @var int 最少需要的行数
+     * @author Verdient。
+     */
+    protected $minRows = null;
+
+    /**
+     * @var int 最多允许的行数
+     * @author Verdient。
+     */
+    protected $maxRows = null;
+
+    /**
+     * @var int 最大允许的文件大小
+     * @author Verdient。
+     */
+    protected $maxFilesize = null;
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function __construct(
+        TranslatorInterface $translator,
+        array $data,
+        array $rules,
+        array $messages = [],
+        array $customAttributes = [],
+        $fileName,
+        int $minRows = null,
+        int $maxRows = null,
+        int $maxFilesize = null
+    ) {
+        $this->addReplacer('min_rows', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
+            return str_replace(':min', $parameters['min'], $message);
+        });
+        $this->addReplacer('max_rows', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
+            return str_replace(':max', $parameters['max'], $message);
+        });
+        $this->addReplacer('distinct_header', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
+            return str_replace(':headers', $parameters['headers'], $message);
+        });
+        $this->addReplacer('missing_header', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
+            return str_replace(':headers', $parameters['headers'], $message);
+        });
+        $this->addReplacer('no_formula', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
+            return str_replace(':coordinate', $parameters['coordinate'], $message);
+        });
+        $this->initialRules = $rules;
+        $this->translator = $translator;
+        $this->customMessages = $messages;
+        $this->customAttributes = $customAttributes;
+        $this->fileName = $fileName;
+        $this->messages = new MessageBag();
+        $this->minRows = $minRows;
+        $this->maxRows = $maxRows;
+        $this->maxFilesize = $maxFilesize;
+        $this->data = $this->parseData($data);
+        $this->setRules($rules);
+    }
 
     /**
      * 设置头部信息
      * @param array $headers 头部信息
+     * @return static
      * @author Verdient。
      */
     public function setHeaders($headers)
     {
         $this->headers = $headers;
+        return $this;
+    }
+
+    /**
+     * 文件的校验规则
+     * @return array
+     * @author Verdient。
+     */
+    protected function fileRules()
+    {
+        $rules = [
+            'required',
+            'file',
+            ['mimes', 'xlsx', 'xls', 'csv'],
+            ['mimetypes', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'text/csv', 'text/plain']
+        ];
+        if ($this->maxFilesize > 0) {
+            $rules[] =  ['max', $this->maxFilesize];
+        }
+        return $rules;
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function parseData(array $data): array
+    {
+        if (!$this->isFileParsed) {
+            $this->isFileParsed = true;
+            /**
+             * @var ValidatorFactoryInterface
+             */
+            $factory = Container::get(ValidatorFactoryInterface::class);
+            $validator = $factory->make(
+                $data,
+                [$this->fileName => $this->fileRules()],
+            );
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+            return $this->parseSpreadsheetData($data[$this->fileName]);
+        }
+        return $data;
+    }
+
+    /**
+     * 解析电子表格数据
+     * @return array
+     * @author Verdient。
+     */
+    protected function parseSpreadsheetData(UploadedFile $file): array
+    {
+        $extension = $file->getExtension();
+        $reader = IOFactory::createReader(ucfirst($extension));
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($file->getPathname());
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+        if ($this->minRows > 0 && ($highestRow - 1) < $this->minRows) {
+            $this->addFailure($this->fileName, 'min_rows', ['min' => $this->minRows]);
+            return [];
+        }
+        if ($this->maxRows > 0 && ($highestRow - 1) > $this->maxRows) {
+            $this->addFailure($this->fileName, 'max_rows', ['max' => $this->maxRows]);
+            return [];
+        }
+        if ($highestRow < 2) {
+            return [];
+        }
+        $this->headers = [];
+        foreach ($worksheet->getRowIterator(1, 1) as $row) {
+            foreach ($row->getCellIterator() as $cell) {
+                if ($headerName = $cell->getFormattedValue()) {
+                    $this->headers[$cell->getColumn()] = $headerName;
+                }
+            }
+        }
+        $repeatedHeaders = array_diff_assoc($this->headers, array_unique($this->headers));
+        if (!empty($repeatedHeaders)) {
+            $headers = [];
+            foreach ($repeatedHeaders as $column => $name) {
+                $headers[] = $name . ' @ ' . $column . '1';
+            }
+            $this->addFailure($this->fileName, 'distinct_header', ['headers' => implode(', ', $headers)]);
+            return [];
+        }
+        $attributes = array_flip($this->customAttributes);
+        $missingHeaders = array_diff(array_keys($attributes), $this->headers);
+        if (!empty($missingHeaders)) {
+            $this->addFailure($this->fileName, 'missing_header', ['headers' => implode(', ', $missingHeaders)]);
+            return [];
+        }
+        $data = [];
+        foreach ($worksheet->getRowIterator(2) as $row) {
+            $rowData = [];
+            foreach ($row->getCellIterator('A', array_key_last($this->headers)) as $cell) {
+                $column = $cell->getColumn();
+                if (isset($attributes[$this->headers[$column]])) {
+                    $attribute = $attributes[$this->headers[$column]];
+                    if (substr($attribute, 0, 2) === '*.') {
+                        $attribute = substr($attribute, 2);
+                    }
+                    if ($cell->isFormula()) {
+                        $this->addFailure($this->fileName, 'no_formula', ['coordinate' => $cell->getCoordinate()]);
+                        return [];
+                    }
+                    $value = $cell->getValue();
+                    if (is_object($value)) {
+                        $value = (string) $value;
+                    }
+                    if (is_string($value)) {
+                        $value = trim($value);;
+                    }
+                    if (is_int($value)) {
+                        $format = $cell->getStyle()->getNumberFormat()->getFormatCode();
+                        if ($format === 'yyyy"年"m"月"d"日";@') {
+                            $format = 'yyyy/m/d;@';
+                        }
+                        $value = Formatter::toFormattedString($value, $format);
+                        if (is_string($value)) {
+                            $value = trim($value);
+                        }
+                    }
+                    $rowData[$attribute] = $value;
+                }
+            }
+            $data[] = $rowData;
+        }
+        $this->headers = array_flip($this->headers);
+        return $data;
     }
 
     /**
@@ -47,11 +253,18 @@ class SpreadsheetValidator extends Validator
      */
     public function passes(): bool
     {
-        $this->rawData = $this->data;;
-        $this->messages = new MessageBag();
-        [$this->distinctValues, $this->failedRules] = [[], []];
+        $rawData = $this->data;
+        $this->distinctValues = [];
+        $this->failedRules = [];
         $this->currentRow = 2;
-        foreach ($this->rawData as $row) {
+        foreach ($rawData as &$row) {
+            foreach ($row as $attribute => $value) {
+                if ($this->hasRule($attribute, 'AsDate')) {
+                    if (is_int($value)) {
+                        Arr::set($row, $attribute, Formatter::toFormattedString($value, 'yyyy/m/d;@'));
+                    }
+                }
+            }
             $this->data = $row;
             foreach ($this->rules as $attribute => $rules) {
                 $attribute = str_replace('\.', '->', $attribute);
@@ -67,8 +280,20 @@ class SpreadsheetValidator extends Validator
             }
             $this->currentRow++;
         }
-        $this->data = $this->rawData;
+        $this->data = $rawData;
         return $this->messages->isEmpty();
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    protected function isValidatable($rule, string $attribute, $value): bool
+    {
+        if ($rule === 'AsDate') {
+            return false;
+        }
+        return parent::isValidatable($rule, $attribute, $value);
     }
 
     /**
@@ -78,7 +303,9 @@ class SpreadsheetValidator extends Validator
     public function getDisplayableAttribute(string $attribute): string
     {
         $message = parent::getDisplayableAttribute($attribute);
-        $message .= ' @ ' . $this->headers[$message] . $this->currentRow;
+        if (isset($this->headers[$message])) {
+            $message .= ' @ ' . $this->headers[$message] . $this->currentRow;
+        }
         return $message;
     }
 
