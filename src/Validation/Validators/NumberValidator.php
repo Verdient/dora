@@ -31,7 +31,7 @@ class NumberValidator extends AbstractValidator
     public static function replacers(): array
     {
         return ['decimal' => function ($message, $attribute, $rule, $parameters) {
-            return str_replace(':decimal', isset($parameters[0]) ? '包含' . $parameters[0] . '个小数的' : '', $message);
+            return str_replace(':decimal', isset($parameters[0]) ? $parameters[0] : 0, $message);
         }];
     }
 
