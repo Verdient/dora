@@ -174,11 +174,11 @@ class SpreadsheetValidator extends Validator
         $worksheet = $spreadsheet->getActiveSheet();
         $highestRow = $worksheet->getHighestRow();
         if ($this->minRows > 0 && ($highestRow - 1) < $this->minRows) {
-            $this->addFailure($this->fileName, 'min_rows', ['min' => $this->minRows]);
+            $this->addFailure($file->getClientFilename(), 'min_rows', ['min' => $this->minRows]);
             return [];
         }
         if ($this->maxRows > 0 && ($highestRow - 1) > $this->maxRows) {
-            $this->addFailure($this->fileName, 'max_rows', ['max' => $this->maxRows]);
+            $this->addFailure($file->getClientFilename(), 'max_rows', ['max' => $this->maxRows]);
             return [];
         }
         if ($highestRow < 2) {
@@ -198,13 +198,13 @@ class SpreadsheetValidator extends Validator
             foreach ($repeatedHeaders as $column => $name) {
                 $headers[] = $name . ' @ ' . $column . '1';
             }
-            $this->addFailure($this->fileName, 'distinct_header', ['headers' => implode(', ', $headers)]);
+            $this->addFailure($file->getClientFilename(), 'distinct_header', ['headers' => implode(', ', $headers)]);
             return [];
         }
         $attributes = array_flip($this->customAttributes);
         $missingHeaders = array_diff(array_keys($attributes), $this->headers);
         if (!empty($missingHeaders)) {
-            $this->addFailure($this->fileName, 'missing_header', ['headers' => implode(', ', $missingHeaders)]);
+            $this->addFailure($file->getClientFilename(), 'missing_header', ['headers' => implode(', ', $missingHeaders)]);
             return [];
         }
         $data = [];
@@ -218,7 +218,7 @@ class SpreadsheetValidator extends Validator
                         $attribute = substr($attribute, 2);
                     }
                     if ($cell->isFormula()) {
-                        $this->addFailure($this->fileName, 'no_formula', ['coordinate' => $cell->getCoordinate()]);
+                        $this->addFailure($file->getClientFilename(), 'no_formula', ['coordinate' => $cell->getCoordinate()]);
                         return [];
                     }
                     $value = $cell->getValue();
