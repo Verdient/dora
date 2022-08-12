@@ -99,6 +99,9 @@ class SpreadsheetValidator extends Validator
         $this->addReplacer('no_formula', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
             return str_replace(':coordinate', $parameters['coordinate'], $message);
         });
+        if ($dataRowStartIndex < 2) {
+            $dataRowStartIndex = 2;
+        }
         $this->initialRules = $rules;
         $this->translator = $translator;
         $this->customMessages = $messages;
@@ -181,11 +184,12 @@ class SpreadsheetValidator extends Validator
         $spreadsheet = $reader->load($file->getPathname());
         $worksheet = $spreadsheet->getActiveSheet();
         $highestRow = $worksheet->getHighestRow();
-        if ($this->minRows > 0 && ($highestRow - 1) < $this->minRows) {
+        $dataRowsCount = $highestRow - ($this->dataRowStartIndex - 1);
+        if ($this->minRows > 0 && $dataRowsCount < $this->minRows) {
             $this->addFailure($file->getClientFilename(), 'min_rows', ['min' => $this->minRows]);
             return [];
         }
-        if ($this->maxRows > 0 && ($highestRow - 1) > $this->maxRows) {
+        if ($this->maxRows > 0 && $dataRowsCount > $this->maxRows) {
             $this->addFailure($file->getClientFilename(), 'max_rows', ['max' => $this->maxRows]);
             return [];
         }
