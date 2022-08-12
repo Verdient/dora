@@ -66,6 +66,16 @@ class SpreadsheetRequest extends FormRequest implements ValidatesWhenResolved
     }
 
     /**
+     * 数据起始行
+     * @return int
+     * @author Verdient。
+     */
+    protected function dataRowStartIndex()
+    {
+        return 2;
+    }
+
+    /**
      * 校验规则
      * @return array
      * @author Verdient。
@@ -91,7 +101,7 @@ class SpreadsheetRequest extends FormRequest implements ValidatesWhenResolved
     public function validator(ValidatorFactory $factory): ValidatorInterface
     {
         return $factory->makeCustom($this->validationData(), $this->rules(), $this->messages(), $this->attributes(), function (...$args) {
-            $args = [...$args, $this->fileName(), $this->minRows(), $this->maxRows(), $this->maxFilesize()];
+            $args = [...$args, $this->fileName(), $this->minRows(), $this->maxRows(), $this->maxFilesize(), $this->dataRowStartIndex()];
             $validator = new SpreadsheetValidator(...$args);
             return $validator;
         });

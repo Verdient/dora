@@ -63,6 +63,12 @@ class SpreadsheetValidator extends Validator
     protected $maxFilesize = null;
 
     /**
+     * @var int 数据起始行
+     * @author Verdient。
+     */
+    protected $dataRowStartIndex = 2;
+
+    /**
      * @inheritdoc
      * @author Verdient。
      */
@@ -75,7 +81,8 @@ class SpreadsheetValidator extends Validator
         $fileName,
         int $minRows = null,
         int $maxRows = null,
-        int $maxFilesize = null
+        int $maxFilesize = null,
+        int $dataRowStartIndex = 2
     ) {
         $this->addReplacer('min_rows', function (string $message, string $attribute, string $rule, array $parameters, Validator $validator) {
             return str_replace(':min', $parameters['min'], $message);
@@ -101,6 +108,7 @@ class SpreadsheetValidator extends Validator
         $this->minRows = $minRows;
         $this->maxRows = $maxRows;
         $this->maxFilesize = $maxFilesize;
+        $this->dataRowStartIndex = $dataRowStartIndex;
         $this->data = $this->parseData($data);
         $this->setRules($rules);
     }
@@ -181,7 +189,7 @@ class SpreadsheetValidator extends Validator
             $this->addFailure($file->getClientFilename(), 'max_rows', ['max' => $this->maxRows]);
             return [];
         }
-        if ($highestRow < 2) {
+        if ($highestRow < $this->dataRowStartIndex) {
             return [];
         }
         $this->headers = [];
@@ -208,7 +216,7 @@ class SpreadsheetValidator extends Validator
             return [];
         }
         $data = [];
-        foreach ($worksheet->getRowIterator(2) as $row) {
+        foreach ($worksheet->getRowIterator($this->dataRowStartIndex) as $row) {
             $rowData = [];
             foreach ($row->getCellIterator('A', array_key_last($this->headers)) as $cell) {
                 $column = $cell->getColumn();
@@ -256,7 +264,7 @@ class SpreadsheetValidator extends Validator
         $rawData = $this->data;
         $this->distinctValues = [];
         $this->failedRules = [];
-        $this->currentRow = 2;
+        $this->currentRow = $this->dataRowStartIndex;
         foreach ($rawData as &$row) {
             foreach ($row as $attribute => $value) {
                 if ($this->hasRule($attribute, 'AsDate')) {
