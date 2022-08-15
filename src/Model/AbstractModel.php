@@ -17,6 +17,7 @@ use Verdient\Dora\Component\ModelCastManager;
 use Verdient\Dora\Component\SchemaManager;
 use Verdient\Dora\Model\Builder as ModelBuilder;
 use Verdient\Dora\Traits\HasEvent;
+use Verdient\Dora\Utils\Arr;
 use Verdient\Dora\Utils\Container;
 use Verdient\Dora\Utils\Math;
 
@@ -171,29 +172,34 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient.
      */
+    protected function castAttribute($key, $value)
+    {
+        if (is_numeric($value)) {
+            $castType = $this->getCastType($key);
+            if ($castType === 'int' || $castType === 'integer') {
+                $value = Math::add($value, 0, 0);
+            }
+        }
+        return parent::castAttribute($key, $value);
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient.
+     */
     public function originalIsEquivalent($key, $current)
     {
         if (!parent::originalIsEquivalent($key, $current)) {
-            $original = $this->getOriginal($key);
-            if (is_numeric($current) && is_numeric($original)) {
-                $current = (string)$current;
-                $original = (string)$original;
-                $pos = strpos($current, '.');
-                if ($pos !== false) {
-                    $scale = strlen($current) - $pos - 1;
-                } else {
-                    $scale = 0;
+            $original = Arr::get($this->original, $key);
+            if ($this->hasCast($key, static::$primitiveCastTypes)) {
+                $current = $this->castAttribute($key, $current);
+                $original = $this->castAttribute($key, $original);
+            }
+            if (is_array($current) && is_array($original)) {
+                if (Arr::isAssoc($original)) {
+                    return Arr::isEqualAssoc($original, $current);
                 }
-                $pos = strpos($original, '.');
-                if ($pos !== false) {
-                    $scale2 = strlen($original) - $pos - 1;
-                    if ($scale2 > $scale) {
-                        $scale = $scale2;
-                    }
-                }
-                if (Math::comp($current, $original, $scale) === 0) {
-                    return true;
-                }
+                return Arr::isEqual($original, $current);
             }
             return false;
         }

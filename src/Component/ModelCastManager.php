@@ -40,6 +40,14 @@ class ModelCastManager
                 case 'json':
                     $casts[$name] = 'json';
                     break;
+                case 'decimal':
+                    if ($length = static::getLength($value['type'])) {
+                        $length = array_map('trim', explode(',', $length));
+                        if (count($length) === 2) {
+                            $casts[$name] = 'decimal:' . $length[1];
+                        }
+                    }
+                    break;
             }
         }
         static::$casts[$tableName] = $casts;
@@ -58,5 +66,23 @@ class ModelCastManager
             return substr($type, 0, $pos);
         }
         return $type;
+    }
+
+    /**
+     * 获取长度
+     * @param string $type 类型
+     * @return string
+     * @author Verdient。
+     */
+    protected static function getLength(string $type): string
+    {
+        if ($pos = strpos($type, '(')) {
+            if ($pos2 = strpos($type, ')')) {
+                if ($pos2 > $pos) {
+                    return substr($type, $pos + 1, $pos2 - $pos - 1);
+                }
+            }
+        }
+        return null;
     }
 }
