@@ -20,7 +20,7 @@ class Math
      */
     public static function add($left, $right, $scale = 0)
     {
-        return bcadd((string) $left, (string) $right, $scale);
+        return bcadd(trim((string) $left), trim((string) $right), $scale);
     }
 
     /**
@@ -33,7 +33,7 @@ class Math
      */
     public static function sub($left, $right, $scale = 0)
     {
-        return bcsub((string) $left, (string) $right, $scale);
+        return bcsub(trim((string) $left), trim((string) $right), $scale);
     }
 
     /**
@@ -46,7 +46,7 @@ class Math
      */
     public static function mul($left, $right, $scale = 0)
     {
-        return bcmul((string) $left, (string) $right, $scale);
+        return bcmul(trim((string) $left), trim((string) $right), $scale);
     }
 
     /**
@@ -59,7 +59,7 @@ class Math
      */
     public static function div($left, $right, $scale = 0)
     {
-        return bcdiv((string) $left, (string) $right, $scale);
+        return bcdiv(trim((string) $left), trim((string) $right), $scale);
     }
 
     /**
@@ -72,7 +72,7 @@ class Math
      */
     public static function comp($left, $right, $scale = 0)
     {
-        return bccomp((string) $left, (string) $right, $scale);
+        return bccomp(trim((string) $left), trim((string) $right), $scale);
     }
 
     /**
