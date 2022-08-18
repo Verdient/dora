@@ -102,48 +102,6 @@ class Arr extends UtilsArr
     }
 
     /**
-     * 判断两个数组内的内容是否完全一致
-     * @param array $a 要比较的第一个数组
-     * @param array $b 要比较的第二个数组
-     * @param array $strict 是否启用严格模式
-     * @return bool
-     * @author Verdient。
-     */
-    public static function isEqual($a, $b, $strict = true): bool
-    {
-        if ($a instanceof Arrayable) {
-            $a = $a->toArray();
-        }
-        if ($b instanceof Arrayable) {
-            $b = $b->toArray();
-        }
-        if ($strict) {
-            $count1 = array_count_values($a);
-            $count2 = array_count_values($b);
-            return static::isEqualAssoc($count1, $count2);
-        }
-        return empty(array_diff($a, $b)) && empty(array_diff($b, $a));
-    }
-
-    /**
-     * 判断两个数组内的内容是否完全一致(比较键值)
-     * @param array $a 要比较的第一个数组
-     * @param array $b 要比较的第二个数组
-     * @return bool
-     * @author Verdient。
-     */
-    public static function isEqualAssoc($a, $b): bool
-    {
-        if ($a instanceof Arrayable) {
-            $a = $a->toArray();
-        }
-        if ($b instanceof Arrayable) {
-            $b = $b->toArray();
-        }
-        return empty(array_diff_assoc($a, $b)) && empty(array_diff_assoc($b, $a));
-    }
-
-    /**
      * 移除数组中的值
      * @param array $array 数组
      * @param mixed $value 要移除的值

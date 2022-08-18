@@ -185,29 +185,6 @@ abstract class AbstractModel extends Model implements CacheableInterface
 
     /**
      * @inheritdoc
-     * @author Verdient.
-     */
-    public function originalIsEquivalent($key, $current)
-    {
-        if (!parent::originalIsEquivalent($key, $current)) {
-            $original = Arr::get($this->original, $key);
-            if ($this->hasCast($key, static::$primitiveCastTypes)) {
-                $current = $this->castAttribute($key, $current);
-                $original = $this->castAttribute($key, $original);
-            }
-            if (is_array($current) && is_array($original)) {
-                if (Arr::isAssoc($original)) {
-                    return Arr::isEqualAssoc($original, $current);
-                }
-                return Arr::isEqual($original, $current);
-            }
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @inheritdoc
      * @author Verdient。
      */
     protected function performInsert(Builder $query)
