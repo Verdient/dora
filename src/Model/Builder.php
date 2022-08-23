@@ -11,7 +11,6 @@ use Hyperf\Database\Model\Collection;
 use Hyperf\Database\Model\Relations\BelongsTo;
 use Hyperf\Database\Model\Relations\HasOneOrMany;
 use Hyperf\Database\Model\Relations\Relation;
-use Hyperf\Database\Query\Expression;
 use Hyperf\Utils\Contracts\Arrayable;
 use Iterator;
 
@@ -289,9 +288,6 @@ class Builder extends \Hyperf\Database\Model\Builder
      */
     protected function supplementTableName($field)
     {
-        if ($field instanceof Expression) {
-            return (string) $field;
-        }
         if (is_string($field)) {
             return $this->getModel()->qualifyColumn($field);
         }
