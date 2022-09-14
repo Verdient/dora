@@ -143,4 +143,6 @@ return [
     'distinct_header' => ':attribute 包含了重复的标题 :headers',
     'missing_header' => ':attribute 缺少了必要的标题: :headers',
     'no_formula' => ':attribute 不能包含公式 @ :coordinate',
+    'contain_letters' => ':attribute 必须包含字母',
+    'contain_numbers' => ':attribute 必须包含数字'
 ];

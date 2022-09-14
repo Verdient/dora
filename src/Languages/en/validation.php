@@ -142,5 +142,7 @@ return [
     'min_rows' => 'The :attribute requires at least :min rows except header row',
     'distinct_header' => 'The :attribute has duplicate headers: :headers',
     'missing_header' => 'The :attribute missing headers: :headers',
-    'no_formula' => 'The :attribute can not include formulas @ :coordinate'
+    'no_formula' => 'The :attribute can not include formulas @ :coordinate',
+    'contain_letters' => 'The :attribute must contain letters',
+    'contain_numbers' => 'The :attribute must contain numbers'
 ];
