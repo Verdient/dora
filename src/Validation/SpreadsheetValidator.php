@@ -272,7 +272,7 @@ class SpreadsheetValidator extends Validator
         foreach ($rawData as &$row) {
             foreach ($row as $attribute => $value) {
                 if ($this->hasRule($attribute, 'AsDate')) {
-                    if (is_int($value)) {
+                    if (is_numeric($value)) {
                         Arr::set($row, $attribute, Formatter::toFormattedString($value, 'yyyy/m/d;@'));
                     }
                 }
