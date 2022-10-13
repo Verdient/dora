@@ -139,10 +139,10 @@ class SpreadsheetValidator extends Validator
             'required',
             'file',
             ['mimes', 'xlsx', 'xls', 'csv'],
-            ['mimetypes', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'text/csv', 'text/plain']
+            ['mimetypes', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'text/csv', 'text/plain', 'application/octet-stream']
         ];
         if ($this->maxFilesize > 0) {
-            $rules[] =  ['max', $this->maxFilesize];
+            $rules[] = ['max', $this->maxFilesize];
         }
         return $rules;
     }
