@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Verdient\Dora\Amqp\Consumer;
 
-use Exception;
-use Hyperf\Amqp\Exception\MessageException;
 use Hyperf\Amqp\Message\ConsumerDelayedMessageTrait;
 use Hyperf\Amqp\Message\ConsumerMessage;
 use Hyperf\Amqp\Message\ProducerDelayedMessageTrait;
@@ -36,6 +34,12 @@ abstract class AbstractConsumer extends ConsumerMessage
      * @author Verdient。
      */
     protected $timeout = 0;
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    protected $routingKey = null;
 
     /**
      * @author Verdient。

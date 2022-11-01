@@ -16,7 +16,9 @@ use Iterator;
 
 /**
  * @inheritdoc
- * @method static withTrashed()
+ * @method static withTrashed(bool $withTrashed = true)
+ * @method static onlyTrashed()
+ * @method static withoutTrashed()
  * @method bool exists()
  * @method static select(array|mixed $columns = ['*'])
  * @method static whereNotNull(string $column, string $boolean = 'and')

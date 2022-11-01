@@ -43,6 +43,10 @@ class Token
         if (!$type) {
             $type = 'authorization';
         }
-        return (new TokenToken(config('token.' . $type)))->parse($token);
+        try {
+            return (new TokenToken(config('token.' . $type)))->parse($token);
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }
