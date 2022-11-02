@@ -41,7 +41,7 @@ class Request
      * @return string
      * @author Verdient。
      */
-    public function to(string $path): string
+    public static function to(string $path): string
     {
         if (substr($path, 0, 1) !== '/') {
             $path = '/' . $path;
