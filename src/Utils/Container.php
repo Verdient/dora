@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Verdient\Dora\Utils;
 
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Utils\ApplicationContext;
 
 /**
@@ -20,16 +21,32 @@ class Container
      */
     public static function get(string $id)
     {
-        return ApplicationContext::getContainer()->get($id);
+        if ($container = static::container()) {
+            return $container->get($id);
+        }
+        return null;
     }
 
     /**
      * 获取容器
-     * @return mixed
+     * @return ContainerInterface|null
      * @author Verdient。
      */
     public static function container()
     {
-        return ApplicationContext::getContainer();
+        if (static::hasContainer()) {
+            return ApplicationContext::getContainer();
+        }
+        return null;
+    }
+
+    /**
+     * 获取是否存在容器
+     * @return bool
+     * @author Verdient。
+     */
+    public static function hasContainer()
+    {
+        return ApplicationContext::hasContainer();
     }
 }

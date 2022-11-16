@@ -2,10 +2,14 @@
 
 namespace Verdient\Dora\Traits;
 
+use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\Formatter\FormatterInterface;
+use Hyperf\Framework\Logger\StdoutLogger;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Throwable;
 use Verdient\Dora\Utils\Container;
 
@@ -38,9 +42,11 @@ trait HasLog
      */
     protected function getLogGroup()
     {
-        $config = Container::get(ConfigInterface::class)->get('logger');
-        if (isset($config[static::class])) {
-            return static::class;
+        if ($config = Container::get(ConfigInterface::class)) {
+            $loggerConfig = $config->get('logger');
+            if (isset($loggerConfig[static::class])) {
+                return static::class;
+            }
         }
         return 'default';
     }
@@ -53,7 +59,25 @@ trait HasLog
     protected function log(): LoggerInterface
     {
         if (!$this->logger) {
-            $this->logger = Container::get(LoggerFactory::class)->get($this->getLogName(), $this->getLogGroup());
+            if ($loggerFactory = Container::get(LoggerFactory::class)) {
+                $this->logger = $loggerFactory->get($this->getLogName(), $this->getLogGroup());
+            }
+            if (!$this->logger) {
+                $this->logger = new StdoutLogger(new Config([
+                    StdoutLoggerInterface::class => [
+                        'log_level' => [
+                            LogLevel::EMERGENCY,
+                            LogLevel::ALERT,
+                            LogLevel::CRITICAL,
+                            LogLevel::ERROR,
+                            LogLevel::WARNING,
+                            LogLevel::NOTICE,
+                            LogLevel::INFO,
+                            LogLevel::DEBUG,
+                        ]
+                    ]
+                ]));
+            }
         }
         return $this->logger;
     }
