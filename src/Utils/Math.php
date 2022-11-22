@@ -105,6 +105,16 @@ class Math
     public static function splitRatio($amount, $ratios, $scale): array
     {
         $result = [];
+        $sumRatios = 0;
+        foreach ($ratios as $ratio) {
+            $ratio = Math::add($ratio, 0, $scale);
+            $sumRatios = Math::add($sumRatios, $ratio, $scale);
+            $result[] = $ratio;
+        }
+        if (static::comp($sumRatios, $amount, $scale) === 0) {
+            return $result;
+        }
+        $result = [];
         $total = 0;
         $lastIndex = count($ratios) - 1;
         $maxRatio = $ratios[$lastIndex];
@@ -118,7 +128,7 @@ class Math
         }
         $realTotal = 0;
         foreach ($ratios as $ratio) {
-            $number = static::mul(($ratio / $total), $amount, 2);
+            $number = static::mul(($ratio / $total), $amount, $scale);
             $result[] = $number;
             $realTotal = static::add($realTotal, $number, $scale);
         }
