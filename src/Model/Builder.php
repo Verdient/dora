@@ -7,7 +7,6 @@ namespace Verdient\Dora\Model;
 use Closure;
 use Exception;
 use Hyperf\Contract\LengthAwarePaginatorInterface;
-use Hyperf\Database\Model\Collection;
 use Hyperf\Database\Model\Relations\BelongsTo;
 use Hyperf\Database\Model\Relations\HasOneOrMany;
 use Hyperf\Database\Model\Relations\Relation;
@@ -69,7 +68,7 @@ class Builder extends \Hyperf\Database\Model\Builder
 
     /**
      * @inheritdoc
-     * @return Collection|AbstractModel[]
+     * @return Collection
      * @author Verdient。
      */
     public function get($columns = ['*'])
