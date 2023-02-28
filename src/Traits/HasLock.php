@@ -16,7 +16,8 @@ trait HasLock
     /**
      * 获取锁
      * @param string $name 锁的名称
-     * @param string $seconds 锁的时长
+     * @param int $timeout 获取锁超时时间
+     * @param int $seconds 锁的时长
      * @param string $redis Redis名称
      * @return RedisLock|false
      * @author Verdient。
