@@ -50,6 +50,7 @@ use Iterator;
  * @method int sum(string $column)
  * @method int avg(string $column)
  * @method int average(string $column)
+ * @method static distinct()
  * @author Verdient。
  */
 class Builder extends \Hyperf\Database\Model\Builder
