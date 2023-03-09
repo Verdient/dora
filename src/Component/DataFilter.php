@@ -376,7 +376,14 @@ class DataFilter
                 $table = $builder->getRelationDefinition($relation)->getRelated()->getTable();
                 $builder->joinWith($relation);
                 foreach ($rules as $rule) {
-                    if (strpos($rule['field'], '.') === false) {
+                    if (is_array($rule['field'])) {
+                        for ($index = 1; $index < count($rule['field']); $index++) {
+                            $field = $rule['field'][$index];
+                            if (strpos($field, '.') === false) {
+                                $rule['field'][$index] = $table . '.' . $field;
+                            }
+                        }
+                    } else if (strpos($rule['field'], '.') === false) {
                         $rule['field'] = $table . '.' . $rule['field'];
                     }
                     $this->buildWhere($builder, $rule, true);
