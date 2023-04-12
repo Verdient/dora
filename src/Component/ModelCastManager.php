@@ -29,7 +29,7 @@ class ModelCastManager
             return static::$casts[$tableName];
         }
         $casts = [];
-        foreach (SchemaManager::getColumns($tableName) as $name => $value) {
+        foreach (SchemaManager::getColumns($tableName, $connectionName) as $name => $value) {
             switch (static::getType($value['type'])) {
                 case 'int':
                 case 'integer':
