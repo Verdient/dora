@@ -6,7 +6,6 @@ namespace Verdient\Dora\Model;
 
 use Exception;
 use Hyperf\Database\Model\Builder;
-use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\ModelCache\Cacheable;
 use Hyperf\ModelCache\CacheableInterface;
@@ -29,7 +28,6 @@ abstract class AbstractModel extends Model implements CacheableInterface
     use Cacheable;
     use HasEvent;
     use Snowflake;
-    use SoftDeletes;
 
     /**
      * @inheritdoc
@@ -57,7 +55,7 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
-    public function getTable()
+    public function getTable(): string
     {
         if (!$this->table) {
             $this->table = Str::snake(class_basename($this));
@@ -69,10 +67,10 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
-    public function getCasts()
+    public function getCasts(): array
     {
         $casts = parent::getCasts();
-        return array_merge(ModelCastManager::get($this->getTable()), $casts);
+        return array_merge(ModelCastManager::get($this->getTable(), $this->getConnectionName()), $casts);
     }
 
     /**
@@ -189,7 +187,7 @@ abstract class AbstractModel extends Model implements CacheableInterface
     protected function performInsert(Builder $query)
     {
         $attributes = $this->attributes;
-        $columns = SchemaManager::getColumns($this->getTable());
+        $columns = SchemaManager::getColumns($this->getTable(), $this->getConnectionName());
         foreach ($this->attributes as $name => $value) {
             if (!isset($columns[$name])) {
                 unset($this->attributes[$name]);
@@ -211,7 +209,7 @@ abstract class AbstractModel extends Model implements CacheableInterface
     protected function performUpdate(Builder $query)
     {
         $attributes = $this->attributes;
-        $columns = SchemaManager::getColumns($this->getTable());
+        $columns = SchemaManager::getColumns($this->getTable(), $this->getConnectionName());
         foreach ($this->attributes as $name => $value) {
             if (!isset($columns[$name])) {
                 unset($this->attributes[$name]);
@@ -250,10 +248,10 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
-    public function getFillable()
+    public function getFillable(): array
     {
         if (empty($this->fillable)) {
-            return array_keys(SchemaManager::getColumns($this->getTable()));
+            return array_keys(SchemaManager::getColumns($this->getTable(), $this->getConnectionName()));
         }
         return $this->fillable;
     }

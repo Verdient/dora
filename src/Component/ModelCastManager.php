@@ -19,10 +19,11 @@ class ModelCastManager
     /**
      * 获取表的字段
      * @param string $tableName 表名称
+     * @param string $connectionName 连接名称
      * @return array
      * @author Verdient。
      */
-    public static function get($tableName): array
+    public static function get($tableName, $connectionName = 'default'): array
     {
         if (isset(static::$casts[$tableName]) && !empty(static::$casts[$tableName])) {
             return static::$casts[$tableName];
