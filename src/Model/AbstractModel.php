@@ -27,7 +27,6 @@ abstract class AbstractModel extends Model implements CacheableInterface
 {
     use Cacheable;
     use HasEvent;
-    use Snowflake;
 
     /**
      * @inheritdoc
