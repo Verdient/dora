@@ -71,7 +71,7 @@ abstract class AbstractProcess extends \Hyperf\Process\AbstractProcess
                 $sleep = $this->sleep;
             }
             if ($sleep) {
-                $this->log()->info('Sleep ' . $sleep . ' seconds');
+                $this->log()->debug('Sleep ' . $sleep . ' seconds');
                 System::sleep($sleep);
             }
         }
