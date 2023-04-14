@@ -357,7 +357,12 @@ class Builder extends \Hyperf\Database\Model\Builder
      */
     public function cursor()
     {
-        foreach ($this->applyScopes()->query->select($this->supplementTableName('*'))->cursor() as $record) {
+        $query = $this
+            ->applyScopes()
+            ->query;
+        foreach ($query
+            ->select($this->supplementTableName($query->columns ?: '*'))
+            ->cursor() as $record) {
             yield $this->model->newFromBuilder($record);
         }
     }
