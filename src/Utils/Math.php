@@ -88,7 +88,7 @@ class Math
         $splitdAmount = static::div($scale, $amount, $number);
         $result = array_fill(0, $number, $splitdAmount);
         $total = static::mul($scale, $splitdAmount, $number);
-        if (static::comp($scale, $amount, $total) !== 0) {
+        if (static::comp($amount, $total, $scale) !== 0) {
             $result[$number - 1] = static::add($result[$number - 1], static::sub($amount, $total, $scale), $scale);
         }
         return $result;
