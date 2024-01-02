@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7b9833c82d85286b5ec1ecf2a83d89b",
+    "content-hash": "5f259798701ac21e535412172d78a6b0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5827,21 +5827,21 @@
         },
         {
             "name": "verdient/ding-talk",
-            "version": "0.0.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Verdient/ding-talk.git",
-                "reference": "5a81a78a56b787c8ea105f18307845bce029c358"
+                "reference": "99de6f7c0f1c6140b3eaac741f0d505ea65313c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Verdient/ding-talk/zipball/5a81a78a56b787c8ea105f18307845bce029c358",
-                "reference": "5a81a78a56b787c8ea105f18307845bce029c358",
+                "url": "https://api.github.com/repos/Verdient/ding-talk/zipball/99de6f7c0f1c6140b3eaac741f0d505ea65313c0",
+                "reference": "99de6f7c0f1c6140b3eaac741f0d505ea65313c0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
-                "verdient/http-api": "^0.0.0"
+                "verdient/http-api": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -5869,25 +5869,24 @@
                 "issues": "https://github.com/Verdient/ding-talk/issues",
                 "source": "https://github.com/Verdient/ding-talk"
             },
-            "time": "2022-07-26T06:35:22+00:00"
+            "time": "2024-01-02T02:48:17+00:00"
         },
         {
             "name": "verdient/http",
-            "version": "0.4.2",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Verdient/http.git",
-                "reference": "118de7328a321678fd26a5768e9f5fa399058812"
+                "reference": "e784ae426dee855fc79dddc189440412b35dc52b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Verdient/http/zipball/118de7328a321678fd26a5768e9f5fa399058812",
-                "reference": "118de7328a321678fd26a5768e9f5fa399058812",
+                "url": "https://api.github.com/repos/Verdient/http/zipball/e784ae426dee855fc79dddc189440412b35dc52b",
+                "reference": "e784ae426dee855fc79dddc189440412b35dc52b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.0",
-                "verdient/chorus": "~0.1.0"
+                "php": ">=7.0.0"
             },
             "require-dev": {
                 "swoole/ide-helper": "^4.8"
@@ -5920,26 +5919,25 @@
                 "issues": "https://github.com/Verdient/http/issues",
                 "source": "https://github.com/Verdient/http"
             },
-            "time": "2022-07-11T10:30:18+00:00"
+            "time": "2023-12-26T03:43:30+00:00"
         },
         {
             "name": "verdient/http-api",
-            "version": "0.0.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Verdient/http-api.git",
-                "reference": "21eea6abcbb009ebea190dc3b75f6215ec68905c"
+                "reference": "9edd60fade3a2a758c29f6263e150e9e10315d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Verdient/http-api/zipball/21eea6abcbb009ebea190dc3b75f6215ec68905c",
-                "reference": "21eea6abcbb009ebea190dc3b75f6215ec68905c",
+                "url": "https://api.github.com/repos/Verdient/http-api/zipball/9edd60fade3a2a758c29f6263e150e9e10315d1e",
+                "reference": "9edd60fade3a2a758c29f6263e150e9e10315d1e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
-                "verdient/chorus": "~0.1.0",
-                "verdient/http": "~0.4.0"
+                "verdient/http": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -5969,7 +5967,7 @@
                 "issues": "https://github.com/Verdient/http-api/issues",
                 "source": "https://github.com/Verdient/http-api"
             },
-            "time": "2021-04-27T06:52:31+00:00"
+            "time": "2023-08-16T11:30:27+00:00"
         },
         {
             "name": "verdient/pipeline",
@@ -6118,21 +6116,21 @@
         },
         {
             "name": "verdient/wechat-work",
-            "version": "0.1.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Verdient/wechat-work.git",
-                "reference": "9943375e9440782077d9804be737f9dd770878d8"
+                "reference": "55f9cecd2a1512ebed363c0c5b7cf327b04728c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Verdient/wechat-work/zipball/9943375e9440782077d9804be737f9dd770878d8",
-                "reference": "9943375e9440782077d9804be737f9dd770878d8",
+                "url": "https://api.github.com/repos/Verdient/wechat-work/zipball/55f9cecd2a1512ebed363c0c5b7cf327b04728c9",
+                "reference": "55f9cecd2a1512ebed363c0c5b7cf327b04728c9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
-                "verdient/http-api": "^0.0.0"
+                "verdient/http-api": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -6160,7 +6158,7 @@
                 "issues": "https://github.com/Verdient/wechat-work/issues",
                 "source": "https://github.com/Verdient/wechat-work"
             },
-            "time": "2022-07-12T08:34:12+00:00"
+            "time": "2023-08-16T11:38:29+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -6360,5 +6358,5 @@
         "ext-redis": ">=5.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }

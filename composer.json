@@ -30,10 +30,10 @@
         "phpdocumentor/reflection-docblock": "^5.3",
         "symfony/mime": "^5.4",
         "symfony/mailer": "^5.4",
-        "verdient/wechat-work": "^0.1",
+        "verdient/wechat-work": "^1.0",
         "phpoffice/phpspreadsheet": "^1.24",
         "verdient/pipeline": "^0.0",
-        "verdient/ding-talk": "^0.0"
+        "verdient/ding-talk": "^1.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.8"
