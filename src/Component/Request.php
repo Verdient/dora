@@ -10,9 +10,4 @@ namespace Verdient\Dora\Component;
  */
 class Request extends \Verdient\http\Request
 {
-    /**
-     * @inheritdoc
-     * @author Verdient。
-     */
-    public $transport = 'coroutine';
 }
