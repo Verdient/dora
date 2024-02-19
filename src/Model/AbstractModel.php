@@ -270,7 +270,7 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
-    public function setCreatedAt($value): static
+    public function setCreatedAt($value)
     {
         return parent::setCreatedAt($value->unix());
     }
@@ -279,7 +279,7 @@ abstract class AbstractModel extends Model implements CacheableInterface
      * @inheritdoc
      * @author Verdient。
      */
-    public function setUpdatedAt($value): static
+    public function setUpdatedAt($value)
     {
         return parent::setUpdatedAt($value->unix());
     }
