@@ -30,13 +30,6 @@ abstract class AbstractModel extends Model implements CacheableInterface
 
     /**
      * @inheritdoc
-     * @var string 日期格式
-     * @author Verdient。
-     */
-    protected $dateFormat = 'U';
-
-    /**
-     * @inheritdoc
      * @author Verdient。
      */
     public function __isset($key)
@@ -262,5 +255,32 @@ abstract class AbstractModel extends Model implements CacheableInterface
     public function getDates(): array
     {
         return $this->dates;
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function getDateFormat(): string
+    {
+        return 'U';
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function setCreatedAt($value): static
+    {
+        return parent::setCreatedAt($value->unix());
+    }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function setUpdatedAt($value): static
+    {
+        return parent::setUpdatedAt($value->unix());
     }
 }
