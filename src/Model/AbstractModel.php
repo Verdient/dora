@@ -254,4 +254,13 @@ abstract class AbstractModel extends Model implements CacheableInterface
         }
         return $this->fillable;
     }
+
+    /**
+     * @inheritdoc
+     * @author Verdient。
+     */
+    public function getDates(): array
+    {
+        return $this->dates;
+    }
 }
